@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import Journey from './models/journey';
+import Station from './models/station';
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -21,7 +22,8 @@ mongoose.connect(MONGODB_URI)
 
 app.post('/api/import', async (req, res) => {
   const paths: string[] = req.body.paths;
-  const result = await importCsvToDatabase(paths);
+  const type: string = req.body.type;
+  const result = await importCsvToDatabase(paths, type);
   res.json(result);
 });
 
@@ -55,9 +57,7 @@ app.get('/api/stations', async (req, res) => {
   console.log('Method:', req.method);
   console.log('Path:  ', req.path);
   try {
-    const stations = await Journey.distinct("departureStationName");
-    //const returnStations = await Journey.distinct("returnStationName");
-    //const uniqueStations = stations.concat(returnStations.filter(returnStation => !stations.includes(returnStation)));
+    const stations = await Station.find({}, null, { sort: { Name: 1 } });
     res.send({ data: stations, size: stations.length });
   }
   catch(error) {

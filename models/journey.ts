@@ -15,7 +15,6 @@ journeySchema.set('toJSON', {
   transform: (_document, returnedObject) => {
     returnedObject._id = returnedObject._id.toString();
     delete returnedObject.__v;
-    delete returnedObject.passwordHash;
   }
 });
 
