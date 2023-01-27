@@ -65,6 +65,19 @@ app.get('/api/stations', async (req, res) => {
   }
 });
 
+app.get('/api/stations/:id', async (req, res) => {
+  console.log('Method:', req.method);
+  console.log('Path:  ', req.path);
+  try {
+    const journeyStarts = await Journey.find({ departureStationId: req.params.id });
+    const journeyEnds = await Journey.find({ returnStationId: req.params.id });
+    res.send({ journeyStarts: journeyStarts.length, journeyEnds: journeyEnds.length });
+  }
+  catch(error) {
+    res.status(500).json(error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

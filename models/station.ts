@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const stationSchema = new mongoose.Schema({
-  ID: { type: Number, required: true },
+  ID: { type: String, required: true },
   Nimi: { type: String },
   Namn: { type: String },
   Name: { type: String },
