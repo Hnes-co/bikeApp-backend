@@ -30,8 +30,12 @@ app.post('/api/import', async (req, res) => {
 app.get('/api/journeys', async (req, res) => {
   console.log('Method:', req.method);
   console.log('Path:  ', req.path);
+  console.log('Query:  ', req.query);
+  const sortRule = req.query.sort?.toString() ?? "";
+  const sortOrder = Number(req.query.order);
+  const options = sortRule !== "" ? { limit: 1000, sort: { [sortRule]: sortOrder } } : { limit: 1000 };
   try {
-    const journeys = await Journey.find({}, null, { limit: 1000 });
+    const journeys = await Journey.find({}, null, options);
     const size = await Journey.countDocuments();
     res.send({ data: journeys, size: size });
   }
@@ -43,9 +47,13 @@ app.get('/api/journeys', async (req, res) => {
 app.get('/api/journeys/:index', async (req, res) => {
   console.log('Method:', req.method);
   console.log('Path:  ', req.path);
+  console.log('Query:  ', req.query);
   const skip = Number(req.params.index ?? 0);
+  const sortRule = req.query.sort?.toString() ?? "";
+  const sortOrder = Number(req.query.order);
+  const options = sortRule !== "" ? { limit: 1000, skip: skip, sort: { [sortRule]: sortOrder } } : { limit: 1000, skip: skip };
   try {
-    const journeys = await Journey.find({}, null, { limit: 1000, skip: skip });
+    const journeys = await Journey.find({}, null, options);
     res.send({ data: journeys });
   }
   catch(error) {
