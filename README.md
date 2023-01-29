@@ -6,7 +6,7 @@
 - Postman or something equivalent for sending post request to import csv files to database 
 
 ### Usage
-- Clone repository, install modules:
+- Open a console, clone repository, install modules:
 ```bash
 $ git clone https://github.com/Hnes-co/bikeApp-backend.git
 $ cd bikeApp-backend
@@ -17,10 +17,15 @@ $ npm install
 MONGODB_URI=<mongodb_uri_here>
 PORT=3001
 ```
-- Start the server
+- Start the server & check that the console logs a successful connection:
 ```bash
 $ npm start
+...
+> Server running on port 3001
+> connected to MongoDB
 ```
+
+
 ### Endpoints
 #### /api/import
 - Import journey / station data from csv files to database
