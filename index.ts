@@ -31,12 +31,13 @@ app.get('/api/journeys', async (req, res) => {
   console.log('Method:', req.method);
   console.log('Path:  ', req.path);
   console.log('Query:  ', req.query);
-  const sortRule = req.query.sort?.toString() ?? "";
-  const sortOrder = Number(req.query.order);
-  const options = sortRule !== "" ? { limit: 1000, sort: { [sortRule]: sortOrder } } : { limit: 1000 };
+  const sortRule = req.query.sort?.toString();
+  const options = sortRule ? { limit: 1000, sort: { [sortRule]: Number(req.query.order) } } : { limit: 1000 };
+  const searchQuery = req.query.search ? new RegExp(req.query.search.toString(), "gi") : null;
+  const search = searchQuery ? { [req.query.stationType?.toString() ?? ""]: searchQuery } : {};
   try {
-    const journeys = await Journey.find({}, null, options);
-    const size = await Journey.countDocuments();
+    const journeys = await Journey.find(search, null, options);
+    const size = await Journey.countDocuments(search);
     res.send({ data: journeys, size: size });
   }
   catch(error) {
@@ -49,11 +50,12 @@ app.get('/api/journeys/:index', async (req, res) => {
   console.log('Path:  ', req.path);
   console.log('Query:  ', req.query);
   const skip = Number(req.params.index ?? 0);
-  const sortRule = req.query.sort?.toString() ?? "";
-  const sortOrder = Number(req.query.order);
-  const options = sortRule !== "" ? { limit: 1000, skip: skip, sort: { [sortRule]: sortOrder } } : { limit: 1000, skip: skip };
+  const sortRule = req.query.sort?.toString();
+  const options = sortRule ? { limit: 1000, skip: skip, sort: { [sortRule]: Number(req.query.order) } } : { limit: 1000, skip: skip };
+  const searchQuery = req.query.search ? new RegExp(req.query.search.toString(), "gi") : null;
+  const search = searchQuery ? { [req.query.stationType?.toString() ?? ""]: searchQuery } : {};
   try {
-    const journeys = await Journey.find({}, null, options);
+    const journeys = await Journey.find(search, null, options);
     res.send({ data: journeys });
   }
   catch(error) {
@@ -64,8 +66,11 @@ app.get('/api/journeys/:index', async (req, res) => {
 app.get('/api/stations', async (req, res) => {
   console.log('Method:', req.method);
   console.log('Path:  ', req.path);
+  console.log('Query:  ', req.query);
+  const searchQuery = req.query.search ? new RegExp(req.query.search.toString(), "gi") : null;
+  const search = searchQuery ? { Nimi: searchQuery } : {};
   try {
-    const stations = await Station.find({}, null, { sort: { Name: 1 } });
+    const stations = await Station.find(search, null, { sort: { Name: 1 } });
     res.send({ data: stations, size: stations.length });
   }
   catch(error) {
@@ -76,6 +81,7 @@ app.get('/api/stations', async (req, res) => {
 app.get('/api/stations/:id', async (req, res) => {
   console.log('Method:', req.method);
   console.log('Path:  ', req.path);
+  console.log('Query:  ', req.query);
   try {
     const journeyStarts = await Journey.find({ departureStationId: req.params.id });
     const journeyEnds = await Journey.find({ returnStationId: req.params.id });
