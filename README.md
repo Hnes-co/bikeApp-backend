@@ -25,9 +25,9 @@ $ npm start
 #### /api/import
 - Import journey / station data from csv files to database
 - Data validation with mongoose schemas
-- NOTE: This server is using MongoDB free cluster which has a 512MB storage limit.
-- This means that the database can only hold about 1.5-2 million journey documents. 
-##### Example usage with Postman:
+### NOTE: This server is using MongoDB free cluster which has a 512MB storage limit.
+### This means that the database can only hold about 1.5-2 million journey documents. 
+#### Example usage with Postman:
 - Make sure the server is running
 - Download your csv file and place it inside bikeApp-backend/assets
 - Open postman and create new POST request to http://localhost:3001/api/import
@@ -46,7 +46,7 @@ $ npm start
 - Limit of 1000 documents returned at once
 #### /api/journeys/:index
 - Get journeys at index for pagination
-- Skips <index> number of documents and returns the next 1000 or remaining documents
+- Skips {index} number of documents and returns the next 1000 or remaining documents
 #### /api/stations
 - Get stations 
 - Filtering
