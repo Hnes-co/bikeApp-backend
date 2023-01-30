@@ -21,10 +21,24 @@ mongoose.connect(MONGODB_URI)
   });
 
 app.post('/api/import', async (req, res) => {
-  const paths: string[] = req.body.paths;
+  const path: string = req.body.path;
   const type: string = req.body.type;
-  const result = await importCsvToDatabase(paths, type);
+  const result = await importCsvToDatabase(path, type);
   res.json(result);
+});
+
+app.get('/api/reset', async (req, res) => {
+  console.log('Method:', req.method);
+  console.log('Path:  ', req.path);
+  console.log('Query:  ', req.query);
+  try {
+    await Journey.deleteMany({});
+    await Station.deleteMany({});
+    res.json("Database reseted.");
+  }
+  catch(error) {
+    res.status(500).json(error);
+  }
 });
 
 app.get('/api/journeys', async (req, res) => {

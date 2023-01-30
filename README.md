@@ -24,14 +24,15 @@ $ npm start
 > Server running on port 3001
 > connected to MongoDB
 ```
-
-
 ### Endpoints
 #### /api/import
 - Import journey / station data from csv files to database
 - Data validation with mongoose schemas
+- Splits large datasets into smaller chunks for more reliability.
 ### NOTE: This server is using MongoDB free cluster which has a 512MB storage limit.
-### This means that the database can only hold about 1.5-2 million journey documents. 
+### The database can only hold about 2 million journey documents.
+- The database currently contains maximum amount of journeys, if you want to test importing, first send GET request to /api/reset to clear the database.
+- Note that this also clears all the stations.
 #### Example usage with Postman:
 - Make sure the server is running
 - Download your csv file and place it inside bikeApp-backend/assets
@@ -40,11 +41,10 @@ $ npm start
 - To request body add:
 ```bash
 {
-  "paths": ["./assets/your_csv_filename.csv"],
+  "path": "./assets/your_csv_filename.csv",
   "type": "station" OR "journey"
 }
 ```
-- Note that "paths" is an array, you can import multiple csv files at once.
 #### /api/journeys
 - Get journeys
 - Sorting & Filtering
@@ -59,3 +59,5 @@ $ npm start
 - Get Journey data for a single station
 - Number of journeys started from the station
 - Number of journeys ended at the station
+#### /api/reset
+- Clear database
